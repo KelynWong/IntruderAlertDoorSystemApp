@@ -28,14 +28,16 @@ for x in range(len(feeds)):
         dateList.append(date_time_obj.date())
         numberList.append(int(results["feeds"][x]["field1"]))
 
+print(dateList)
+print(numberList)
+
 for x in range(len(numberList)):
     temp = dateList[x]
     if x + 1 != len(numberList):
         if dateList[x + 1] == temp:
             totalOfThatDay = totalOfThatDay + 1
-            if x == 1:
-                totalOfThatDay = totalOfThatDay + 1
         else:
+            totalOfThatDay = totalOfThatDay + 1
             dates.append(temp.strftime('%d/%m/%Y'))
             noOfEnter.append(totalOfThatDay)
             totalOfThatDay = 0
@@ -44,6 +46,7 @@ for x in range(len(numberList)):
         totalOfThatDay = totalOfThatDay + 1
         dates.append(temp.strftime('%d/%m/%Y'))
         noOfEnter.append(totalOfThatDay)
+
 
 st.title('Intruder alert door system')
 
