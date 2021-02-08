@@ -6,6 +6,7 @@ import requests
 import json
 import datetime
 import _strptime
+from PIL import Image
 
 dateList = []
 numberList = []
@@ -17,8 +18,6 @@ count = 0
 totalOfThatDay = 0
 
 resp=requests.get("https://api.thingspeak.com/channels/1230188/fields/1.json") #to read only field 2, 10 values
-
-
 results=json.loads(resp.text) #convert json into Python object
 feeds = results["feeds"]
 
@@ -26,10 +25,7 @@ for x in range(len(feeds)):
     if feeds[x]["field1"] != None:
         date_time_obj = datetime.datetime.strptime(feeds[x]["created_at"], '%Y-%m-%dT%H:%M:%SZ')
         dateList.append(date_time_obj.date())
-        numberList.append(int(results["feeds"][x]["field1"]))
-
-print(dateList)
-print(numberList)
+        numberList.append(int(feeds[x]["field1"]))
 
 for x in range(len(numberList)):
     temp = dateList[x]
@@ -49,6 +45,12 @@ for x in range(len(numberList)):
 
 
 st.title('Intruder alert door system')
+st.header('Live video')
+st.markdown("""
+<iframe width="420" height="315" src="https://www.youtube.com/watch?v=51u5fnyrGj4"></iframe>
+""", unsafe_allow_html=True)
+
+st.header('Analytics')
 
 df = pd.DataFrame({
   'date': dates,
@@ -62,24 +64,60 @@ df
 st.line_chart(df)
 
 
+st.header('Controls')
+
+st.subheader('Buzzer')
 buzzerOnButton = st.button('On buzzer');
 buzzerOffButton = st.button('Off buzzer');
-doorUnlockButton = st.button('Unlock door');
-doorLockButton = st.button('Lock door');
-
 if buzzerOnButton:
-    st.write('The buzzer is currently on')
+    image = Image.open('switch-on.png')
+    st.image(image, caption='Buzzer On', width=100)
     requests.get("https://api.thingspeak.com/update?api_key=Q539CRA8JC5EWP86&field3=1")
 
 if buzzerOffButton:
-    st.write('The buzzer is currently off')
+    image = Image.open('switch-off.png')
+    st.image(image, caption='Buzzer Off', width=100)
     requests.get("https://api.thingspeak.com/update?api_key=Q539CRA8JC5EWP86&field3=0")
+#get data from thingspeak to check if buzzer is currently on or off
+resp=requests.get("https://api.thingspeak.com/channels/1230188/fields/3.json") #to read only field 2, 10 values
+results=json.loads(resp.text) #convert json into Python object
+feeds = results["feeds"]
+for x in range(len(feeds)):
+    if feeds[x]["field3"] != None:
+        numberList.append(int(feeds[x]["field3"]))
+if buzzerOffButton == False and buzzerOnButton == False:
+    if numberList[len(numberList)-1] == 1:
+        image = Image.open('switch-on.png')
+        st.image(image, caption='Buzzer is currently on', width=100)
+    else:
+        image = Image.open('switch-off.png')
+        st.image(image, caption='Buzzer is currently off', width=100)
 
+
+
+st.subheader('Door')
+doorUnlockButton = st.button('Unlock door');
+doorLockButton = st.button('Lock door');
 if doorUnlockButton:
-    st.write('The door is currently unlocked')
+    image = Image.open('unlocked.png')
+    st.image(image, caption='Door unlocked', width=100)
     requests.get("https://api.thingspeak.com/update?api_key=Q539CRA8JC5EWP86&field2=1")
 
 if doorLockButton:
-    st.write('The door is currently locked')
+    image = Image.open('lock.png')
+    st.image(image, caption='Door locked', width=100)
     requests.get("https://api.thingspeak.com/update?api_key=Q539CRA8JC5EWP86&field2=0")
-
+#get data from thingspeak to check if door is currently unlock or locked
+resp=requests.get("https://api.thingspeak.com/channels/1230188/fields/2.json") #to read only field 2, 10 values
+results=json.loads(resp.text) #convert json into Python object
+feeds = results["feeds"]
+for x in range(len(feeds)):
+    if feeds[x]["field2"] != None:
+        numberList.append(int(feeds[x]["field2"]))
+if doorUnlockButton == False and doorLockButton == False:    
+    if numberList[len(numberList)-1]:
+        image = Image.open('unlocked.png')
+        st.image(image, caption='Door is currently unlocked', width=100)
+    else:
+        image = Image.open('lock.png')
+        st.image(image, caption='Door is currently locked', width=100)
