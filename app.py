@@ -121,3 +121,10 @@ if doorUnlockButton == False and doorLockButton == False:
     else:
         image = Image.open('lock.png')
         st.image(image, caption='Door is currently locked', width=100)
+
+st.subheader('Send message to display on LCD')
+user_input = st.text_input("Message")
+sendMessage = st.button('Send');
+if sendMessage:
+    print('Send message')
+    requests.get("https://api.thingspeak.com/update?api_key=Q539CRA8JC5EWP86&status={}".format(user_input))
