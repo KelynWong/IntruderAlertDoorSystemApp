@@ -17,10 +17,9 @@ noOfEnter = []
 count = 0
 totalOfThatDay = 0
 
-resp=requests.get("https://api.thingspeak.com/channels/1230188/fields/1.json?results=100") #to read only field 2, 10 values
+resp=requests.get("https://api.thingspeak.com/channels/1230188/fields/1.json?results=8000") #to read only field 2, 10 values
 results=json.loads(resp.text) #convert json into Python object
 feeds = results["feeds"]
-
 for x in range(len(feeds)):
     if feeds[x]["field1"] != None:
         date_time_obj = datetime.datetime.strptime(feeds[x]["created_at"], '%Y-%m-%dT%H:%M:%SZ')
