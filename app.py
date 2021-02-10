@@ -17,7 +17,7 @@ noOfEnter = []
 count = 0
 totalOfThatDay = 0
 
-resp=requests.get("https://api.thingspeak.com/channels/1230188/fields/1.json") #to read only field 2, 10 values
+resp=requests.get("https://api.thingspeak.com/channels/1230188/fields/1.json?results=100") #to read only field 2, 10 values
 results=json.loads(resp.text) #convert json into Python object
 feeds = results["feeds"]
 
