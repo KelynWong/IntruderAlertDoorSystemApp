@@ -46,7 +46,7 @@ for x in range(len(numberList)):
 st.title('Intruder alert door system')
 st.header('Live video')
 st.markdown("""
-<iframe width="560" height="315" src="https://youtu.be/HMlbBscdvzs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HMlbBscdvzs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 """, unsafe_allow_html=True)
 
 st.header('Analytics')
