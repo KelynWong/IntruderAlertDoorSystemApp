@@ -51,7 +51,7 @@ st.markdown("""
 
 st.header('Analytics')
 
-col1, col2 = st.beta_columns([1.5,3])
+col1, col2 = st.columns([1.5,3])
 df = pd.DataFrame({
   'date': dates,
   'noOfEnter': noOfEnter
@@ -74,7 +74,7 @@ if sendMessage:
     print('Send message')
     requests.get("https://api.thingspeak.com/update?api_key=Q539CRA8JC5EWP86&status={}".format(user_input))
 
-col3, col4 = st.beta_columns(2)
+col3, col4 = st.columns(2)
 st.text('Buttons can only trigger every 15 secs')
 with col3:
     st.subheader('Buzzer')
